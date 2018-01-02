@@ -1,0 +1,5 @@
+name: LapisInventories
+version: ${project.version}
+main: net.lapsimc.lapisinventories.LapisInventories
+authors: [Dart2112]
+description: A basic GameMode based inventory management system
