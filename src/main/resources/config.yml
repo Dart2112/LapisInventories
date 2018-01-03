@@ -1,1 +1,12 @@
-Placeholder: true
+ConfigVersion: 1
+
+#This will stop survival players from getting item drops if the block was placed in creative mode, REQUIRES DATABASE ACCESS
+CreativeBlockTracking: true
+#Database settings for if you wish to use a Database as your data store
+Database:
+  #The URL and port of your database
+  location: "localhost:3306"
+  username: "root"
+  password: ""
+  #This should be the name of a database on your database server
+  dbName: "SpigotServer"

@@ -37,6 +37,7 @@ public class InventoryManager {
     }
 
     public void saveInventory(Player p, GameMode gm) {
+        //TODO: store EXP with inventories
         Inventory inv = p.getInventory();
         File playerdataFile = new File(inventoriesFile + File.separator + p.getUniqueId() + ".yml");
         if (!playerdataFile.exists()) {

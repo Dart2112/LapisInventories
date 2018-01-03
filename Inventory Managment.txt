@@ -1,5 +1,5 @@
 Change inventories when changing gamemode
-store inventories for login plugin
+store inventories w/EXP for login plugin
 log blocks placed in creative & block the items dropping from them
 stop creative players without permission from dropping items or opening containers
 convert from GMI
