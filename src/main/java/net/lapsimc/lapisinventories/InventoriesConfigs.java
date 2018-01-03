@@ -17,7 +17,6 @@
 package net.lapsimc.lapisinventories;
 
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
@@ -25,16 +24,15 @@ import java.io.*;
 public class InventoriesConfigs {
 
     private LapisInventories plugin;
-    private File messagesFile;
     private YamlConfiguration messages;
 
-    public InventoriesConfigs(LapisInventories p) {
+    InventoriesConfigs(LapisInventories p) {
         plugin = p;
         loadMessages();
     }
 
     private void loadMessages() {
-        messagesFile = new File(plugin.getDataFolder(), "messages.yml");
+        File messagesFile = new File(plugin.getDataFolder(), "messages.yml");
         if (!messagesFile.exists()) {
             try (InputStream is = plugin.getResource("messages.yml");
                  OutputStream os = new FileOutputStream(messagesFile)) {
@@ -47,11 +45,7 @@ public class InventoriesConfigs {
                 e.printStackTrace();
             }
         }
-        try {
-            messages.load(messagesFile);
-        } catch (IOException | InvalidConfigurationException e) {
-            e.printStackTrace();
-        }
+        messages = YamlConfiguration.loadConfiguration(messagesFile);
     }
 
     public String getMessage(String key) {

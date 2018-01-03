@@ -1,2 +1,6 @@
+CheckBlock:
+  Positive: "This block was placed in creative by %PLAYER%"
+  Negative: "There is no data stored for this block"
 Denied:
-  itemDrop: "&cYou aren't allowed to drop items in creative mode"
+  itemDrop: "&cYou aren't allowed to drop items in creative mode!"
+  containerAccess: "&cYou aren't allowed to access containers in creative mode!"

@@ -22,13 +22,16 @@ public final class LapisInventories extends JavaPlugin {
 
     public InventoryManager invManager;
     public InventoriesConfigs invConfigs;
+    public InventoriesBlockLogger blockLogger;
     public LapisInventoriesAPI api;
 
     @Override
     public void onEnable() {
-        api = new LapisInventoriesAPI(this);
+        saveDefaultConfig();
+        blockLogger = new InventoriesBlockLogger(this);
         invConfigs = new InventoriesConfigs(this);
         invManager = new InventoryManager(this);
+        api = new LapisInventoriesAPI(this);
         new InventoriesListener(this);
         getLogger().info("LapisInventories v." + getDescription().getVersion() + " has been enabled");
     }

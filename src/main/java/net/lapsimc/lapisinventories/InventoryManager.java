@@ -17,27 +17,66 @@
 package net.lapsimc.lapisinventories;
 
 import org.bukkit.GameMode;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class InventoryManager {
 
-    private LapisInventories plugin;
+    private File inventoriesFile;
 
-    public InventoryManager(LapisInventories p) {
-        plugin = p;
+    InventoryManager(LapisInventories p) {
+        inventoriesFile = new File(p.getDataFolder() + File.separator + "Inventories");
+        inventoriesFile.mkdir();
     }
 
-    public void saveInventory(Player p, GameMode type) {
+    public void saveInventory(Player p, GameMode gm) {
         Inventory inv = p.getInventory();
-        //TODO: save inventory to file
+        File playerdataFile = new File(inventoriesFile + File.separator + p.getUniqueId() + ".yml");
+        if (!playerdataFile.exists()) {
+            try {
+                playerdataFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        YamlConfiguration playerdata = YamlConfiguration.loadConfiguration(playerdataFile);
+        if (playerdata.contains(gm.getValue() + "")) {
+            return;
+        }
+        try {
+            playerdata.set(gm.getValue() + "", Arrays.asList(inv.getContents()));
+            playerdata.save(playerdataFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         p.getInventory().clear();
     }
 
-    public void loadInventory(Player p, GameMode type) {
-        //TODO: load inventory from file
-        Inventory inv = null;
-        p.getInventory().setContents(inv.getContents());
+    public void loadInventory(Player p, GameMode gm) {
+        File playerdataFile = new File(inventoriesFile + File.separator + p.getUniqueId() + ".yml");
+        if (!playerdataFile.exists()) {
+            try {
+                playerdataFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        YamlConfiguration playerdata = YamlConfiguration.loadConfiguration(playerdataFile);
+        if (!playerdata.contains(gm.getValue() + "")) {
+            return;
+        }
+        @SuppressWarnings("unchecked") List<ItemStack> items = (List<ItemStack>) playerdata.get(gm.getValue() + "");
+        ItemStack[] itemsArray = new ItemStack[items.size()];
+        itemsArray = items.toArray(itemsArray);
+        p.getInventory().setContents(itemsArray);
+        playerdata.set(gm.getValue() + "", null);
     }
 
 
