@@ -3,3 +3,12 @@ version: ${project.version}
 main: net.lapsimc.lapisinventories.LapisInventories
 authors: [Dart2112]
 description: A basic GameMode based inventory management system
+permissions:
+  LapisInventories.canDrop:
+    decsription: Players with this permission will be able to drop items in creative
+  LapisInventories.containerAccess:
+    description: Players with this permission will be able to access containers in creative
+  LapisInventories.checkBlocks:
+    description: Players with this permission will be able to check if a block was placed in creative with a blaze rod
+  LapisInventories.bypassLogging:
+    description: Players with this permission will not have creative blocks logged

@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class InventoryManager {
+class InventoryManager {
 
     private File inventoriesFile;
 
@@ -36,48 +36,51 @@ public class InventoryManager {
         inventoriesFile.mkdir();
     }
 
-    public void saveInventory(Player p, GameMode gm) {
+    void saveInventory(Player p, GameMode gm) {
+        if (gm.getValue() == 3) return;
         //TODO: store EXP with inventories
         Inventory inv = p.getInventory();
-        File playerdataFile = new File(inventoriesFile + File.separator + p.getUniqueId() + ".yml");
-        if (!playerdataFile.exists()) {
+        File playerDataFile = new File(inventoriesFile + File.separator + p.getUniqueId() + ".yml");
+        if (!playerDataFile.exists()) {
             try {
-                playerdataFile.createNewFile();
+                playerDataFile.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        YamlConfiguration playerdata = YamlConfiguration.loadConfiguration(playerdataFile);
-        if (playerdata.contains(gm.getValue() + "")) {
+        YamlConfiguration playerData = YamlConfiguration.loadConfiguration(playerDataFile);
+        if (playerData.contains(gm.getValue() + ".inventory")) {
             return;
         }
         try {
-            playerdata.set(gm.getValue() + "", Arrays.asList(inv.getContents()));
-            playerdata.save(playerdataFile);
+            playerData.set(gm.getValue() + ".inventory", Arrays.asList(inv.getContents()));
+            playerData.save(playerDataFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
         p.getInventory().clear();
     }
 
-    public void loadInventory(Player p, GameMode gm) {
-        File playerdataFile = new File(inventoriesFile + File.separator + p.getUniqueId() + ".yml");
-        if (!playerdataFile.exists()) {
+    void loadInventory(Player p, GameMode gm) {
+        if (gm.getValue() == 3) return;
+        File playerDataFile = new File(inventoriesFile + File.separator + p.getUniqueId() + ".yml");
+        if (!playerDataFile.exists()) {
             try {
-                playerdataFile.createNewFile();
+                playerDataFile.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        YamlConfiguration playerdata = YamlConfiguration.loadConfiguration(playerdataFile);
-        if (!playerdata.contains(gm.getValue() + "")) {
+        YamlConfiguration playerData = YamlConfiguration.loadConfiguration(playerDataFile);
+        if (!playerData.contains(gm.getValue() + ".inventory")) {
+            p.getInventory().clear();
             return;
         }
-        @SuppressWarnings("unchecked") List<ItemStack> items = (List<ItemStack>) playerdata.get(gm.getValue() + "");
+        @SuppressWarnings("unchecked") List<ItemStack> items = (List<ItemStack>) playerData.get(gm.getValue() + ".inventory");
         ItemStack[] itemsArray = new ItemStack[items.size()];
         itemsArray = items.toArray(itemsArray);
         p.getInventory().setContents(itemsArray);
-        playerdata.set(gm.getValue() + "", null);
+        playerData.set(gm.getValue() + ".inventory", null);
     }
 
 

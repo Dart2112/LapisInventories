@@ -32,8 +32,8 @@
     </properties>
 
     <build>
-        <finalName>$[project.name]</finalName>
-        <defaultGoal>clean package</defaultGoal>
+        <finalName>${project.name}</finalName>
+        <defaultGoal>clean install</defaultGoal>
         <plugins>
             <plugin>
                 <version>3.6.1</version>

@@ -23,15 +23,17 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.sql.*;
 import java.util.UUID;
 
-public class InventoriesBlockLogger {
+class InventoriesBlockLogger {
 
     private MySQLManager MySQL;
 
     InventoriesBlockLogger(LapisInventories p) {
-        MySQL = new MySQLManager(p.getConfig());
+        if (p.getConfig().getBoolean("CreativeBlockTracking")) {
+            MySQL = new MySQLManager(p.getConfig());
+        }
     }
 
-    public void addBlock(Block block, UUID uuid) {
+    void addBlock(Block block, UUID uuid) {
         if (checkBlock(block)) {
             MySQL.setData(concatenateLocation(block), "Location", uuid.toString());
         } else {
@@ -39,18 +41,18 @@ public class InventoriesBlockLogger {
         }
     }
 
-    public void removeBlock(Block block) {
+    void removeBlock(Block block) {
         if (checkBlock(block)) {
             MySQL.dropRow(checkPlacer(block).toString());
         }
     }
 
-    public boolean checkBlock(Block block) {
+    boolean checkBlock(Block block) {
         String location = concatenateLocation(block);
         return MySQL.getString(location, "Location") != null;
     }
 
-    public UUID checkPlacer(Block block) {
+    UUID checkPlacer(Block block) {
         String location = concatenateLocation(block);
         String uuid = MySQL.getString(location, "UUID");
         if (uuid != null) {
@@ -80,9 +82,9 @@ class MySQLManager {
         this.DBName = config.getString("Database.dbName");
         url = url.replace("%URL%", config.getString("Database.location")).replace("%DBName%", DBName);
         if (isConnected()) {
-            setupDatabase(username, password);
+            setupDatabase();
         }
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(Bukkit.getPluginManager().getPlugin("LapisLogin"),
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(Bukkit.getPluginManager().getPlugin("LapisInventories"),
                 connectionCleaning(), 30 * 20, 30 * 20);
     }
 
@@ -98,7 +100,7 @@ class MySQLManager {
         };
     }
 
-    public void addData(String location, String uuid) {
+    void addData(String location, String uuid) {
         try {
             conn = getConnection();
             String sql = "INSERT INTO CreativeBlocks(Location,UUID) VALUES(?,?)";
@@ -113,7 +115,7 @@ class MySQLManager {
         }
     }
 
-    public void setData(String location, String path, String uuid) {
+    void setData(String location, String path, String uuid) {
         try {
             conn = getConnection();
             String sqlUpdate = "UPDATE CreativeBlocks SET " + path + " = ? WHERE UUID = ?";
@@ -127,7 +129,7 @@ class MySQLManager {
         }
     }
 
-    public String getString(String location, String key) {
+    String getString(String location, String key) {
         try {
             ResultSet rs = getResults(location, key);
             if (!rs.isBeforeFirst()) {
@@ -154,7 +156,7 @@ class MySQLManager {
         return null;
     }
 
-    public void dropRow(String UUID) {
+    void dropRow(String UUID) {
         try {
             conn = getConnection();
             String sqlUpdate = "DELETE FROM CreativeBlocks WHERE UUID = ?";
@@ -202,7 +204,7 @@ class MySQLManager {
         return true;
     }
 
-    private void setupDatabase(String username, String password) {
+    private void setupDatabase() {
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             conn = getConnection();

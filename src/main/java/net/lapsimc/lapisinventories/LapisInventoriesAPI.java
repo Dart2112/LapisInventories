@@ -24,10 +24,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class LapisInventoriesAPI {
 
-    private LapisInventories plugin;
-    private List<JavaPlugin> hooks = new ArrayList<>();
+    private static List<JavaPlugin> hooks = new ArrayList<>();
+    private static LapisInventories plugin;
 
     LapisInventoriesAPI(LapisInventories p) {
         plugin = p;
@@ -41,11 +42,19 @@ public class LapisInventoriesAPI {
         Bukkit.getLogger().info("[LapisInventories] New login plugin " + p.getName() + " added");
     }
 
+    public void hideInventory(Player p, GameMode gm) {
+        plugin.invManager.saveInventory(p, gm);
+    }
+
+    public void giveInventory(Player p, GameMode gm) {
+        plugin.invManager.loadInventory(p, gm);
+    }
+
     public void loginComplete(Player p, GameMode gm) {
         plugin.invManager.loadInventory(p, gm);
     }
 
-    public List<JavaPlugin> getHooks() {
+    List<JavaPlugin> getHooks() {
         return hooks;
     }
 

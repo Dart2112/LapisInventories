@@ -48,28 +48,30 @@ public class InventoriesListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayeGamemodeChange(PlayerGameModeChangeEvent e) {
+    public void onPlayerGamemodeChange(PlayerGameModeChangeEvent e) {
         plugin.invManager.saveInventory(e.getPlayer(), e.getPlayer().getGameMode());
         plugin.invManager.loadInventory(e.getPlayer(), e.getNewGameMode());
     }
 
     @EventHandler
     public void onItemDrop(PlayerDropItemEvent e) {
-        if (e.getPlayer().getGameMode() == GameMode.CREATIVE && !e.getPlayer().hasPermission("LapisInventories")) {
+        if (e.getPlayer().getGameMode() == GameMode.CREATIVE && !e.getPlayer().hasPermission("LapisInventories.canDrop")) {
             e.setCancelled(true);
             e.getPlayer().sendMessage(plugin.invConfigs.getColoredMessage("Denied.itemDrop"));
         }
     }
 
     @EventHandler
-    public void onContainerOpen(PlayerInteractEvent e) {
-        if (e.getClickedBlock() instanceof Container) {
-            if (e.getPlayer().getGameMode() == GameMode.CREATIVE && !e.getPlayer().hasPermission("LapisInventories")) {
+    public void onPlayerInteract(PlayerInteractEvent e) {
+        if (e.getClickedBlock().getState() instanceof Container) {
+            if (e.getPlayer().getGameMode() == GameMode.CREATIVE && !e.getPlayer().hasPermission("LapisInventories.containerAccess")) {
                 e.setCancelled(true);
                 e.getPlayer().sendMessage(plugin.invConfigs.getColoredMessage("Denied.containerAccess"));
             }
         }
-        if (e.getItem().getType() == Material.BLAZE_ROD && e.getPlayer().hasPermission("CheckBlocks")) {
+        //TODO: add a command to toggle this!
+        if (e.getItem() != null && e.getItem().getType() == Material.BLAZE_ROD
+                && plugin.getConfig().getBoolean("CreativeBlockTracking") && e.getPlayer().hasPermission("LapisInventories.checkBlocks")) {
             if (plugin.blockLogger.checkBlock(e.getClickedBlock())) {
                 e.getPlayer().sendMessage(plugin.invConfigs.getColoredMessage("BlockCheck.Positive").replace("%PLAYER%", Bukkit.getPlayer(plugin.blockLogger.checkPlacer(e.getClickedBlock())).getName()));
             } else {
@@ -80,16 +82,21 @@ public class InventoriesListener implements Listener {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
-        if (!e.getPlayer().hasPermission("BypassLogging") && e.getPlayer().getGameMode() == GameMode.CREATIVE) {
+        if (!e.getPlayer().hasPermission("LapisInventories.bypassLogging")
+                && plugin.getConfig().getBoolean("CreativeBlockTracking") && e.getPlayer().getGameMode() == GameMode.CREATIVE) {
             plugin.blockLogger.addBlock(e.getBlock(), e.getPlayer().getUniqueId());
         }
     }
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
-        if (plugin.blockLogger.checkBlock(e.getBlock())) {
-            e.setDropItems(false);
-            plugin.blockLogger.removeBlock(e.getBlock());
+        //check that we have database settings and that we are tracking this
+        if (plugin.getConfig().getBoolean("CreativeBlockTracking")) {
+            //if the block was placed in creative, don't drop it and remove it from the system
+            if (plugin.blockLogger.checkBlock(e.getBlock())) {
+                e.setDropItems(false);
+                plugin.blockLogger.removeBlock(e.getBlock());
+            }
         }
     }
 
