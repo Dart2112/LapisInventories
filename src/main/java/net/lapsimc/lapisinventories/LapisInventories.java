@@ -18,12 +18,16 @@ package net.lapsimc.lapisinventories;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
+import java.util.UUID;
+
 public final class LapisInventories extends JavaPlugin {
 
-    public InventoryManager invManager;
-    public InventoriesConfigs invConfigs;
-    public InventoriesBlockLogger blockLogger;
-    public LapisInventoriesAPI api;
+    InventoryManager invManager;
+    InventoriesConfigs invConfigs;
+    InventoriesBlockLogger blockLogger;
+    LapisInventoriesAPI api;
+    ArrayList<UUID> inspectingPlayers = new ArrayList<>();
 
     @Override
     public void onEnable() {
@@ -32,6 +36,7 @@ public final class LapisInventories extends JavaPlugin {
         invConfigs = new InventoriesConfigs(this);
         invManager = new InventoryManager(this);
         api = new LapisInventoriesAPI(this);
+        new InventoriesCommand(this);
         new InventoriesListener(this);
         getLogger().info("LapisInventories v." + getDescription().getVersion() + " has been enabled");
     }

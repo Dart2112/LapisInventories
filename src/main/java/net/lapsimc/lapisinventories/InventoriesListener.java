@@ -20,11 +20,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Container;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.ItemStack;
 
 public class InventoriesListener implements Listener {
 
@@ -69,15 +71,20 @@ public class InventoriesListener implements Listener {
                 e.getPlayer().sendMessage(plugin.invConfigs.getColoredMessage("Denied.containerAccess"));
             }
         }
-        //TODO: add a command to toggle this!
-        if (e.getItem() != null && e.getItem().getType() == Material.BLAZE_ROD
-                && plugin.getConfig().getBoolean("CreativeBlockTracking") && e.getPlayer().hasPermission("LapisInventories.checkBlocks")) {
+        if (canInspect(e.getPlayer(), e.getItem())) {
             if (plugin.blockLogger.checkBlock(e.getClickedBlock())) {
                 e.getPlayer().sendMessage(plugin.invConfigs.getColoredMessage("BlockCheck.Positive").replace("%PLAYER%", Bukkit.getPlayer(plugin.blockLogger.checkPlacer(e.getClickedBlock())).getName()));
             } else {
                 e.getPlayer().sendMessage(plugin.invConfigs.getColoredMessage("BlockCheck.Negative"));
             }
         }
+    }
+
+    private boolean canInspect(Player p, ItemStack item) {
+        return plugin.inspectingPlayers.contains(p.getUniqueId())
+                && item != null && item.getType() == Material.BLAZE_ROD
+                && plugin.getConfig().getBoolean("CreativeBlockTracking")
+                && p.hasPermission("LapisInventories.checkBlocks");
     }
 
     @EventHandler
