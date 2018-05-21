@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 class InventoryManager {
 
     private File inventoriesFile;
@@ -38,7 +39,6 @@ class InventoryManager {
 
     void saveInventory(Player p, GameMode gm) {
         if (gm.getValue() == 3) return;
-        //TODO: store EXP with inventories
         Inventory inv = p.getInventory();
         File playerDataFile = new File(inventoriesFile + File.separator + p.getUniqueId() + ".yml");
         if (!playerDataFile.exists()) {
@@ -54,6 +54,7 @@ class InventoryManager {
         }
         try {
             playerData.set(gm.getValue() + ".inventory", Arrays.asList(inv.getContents()));
+            playerData.set(gm.getValue() + ".exp", p.getExp());
             playerData.save(playerDataFile);
         } catch (IOException e) {
             e.printStackTrace();
@@ -80,7 +81,10 @@ class InventoryManager {
         ItemStack[] itemsArray = new ItemStack[items.size()];
         itemsArray = items.toArray(itemsArray);
         p.getInventory().setContents(itemsArray);
+        Float exp = (Float) playerData.get(gm.getValue() + ".exp");
+        p.setExp(exp);
         playerData.set(gm.getValue() + ".inventory", null);
+        playerData.set(gm.getValue() + ".exp", null);
     }
 
 
