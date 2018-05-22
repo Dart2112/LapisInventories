@@ -28,6 +28,8 @@ public class InventoriesCommand implements CommandExecutor {
 
     InventoriesCommand(LapisInventories p) {
         plugin = p;
+        //TODO:setup command in plugin.yml
+        p.getCommand("LapisInventories").setExecutor(this);
     }
 
     @Override
