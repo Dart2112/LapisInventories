@@ -23,9 +23,9 @@ import java.util.UUID;
 
 public final class LapisInventories extends JavaPlugin {
 
+    public InventoriesBlockLogger blockLogger;
     InventoryManager invManager;
     InventoriesConfigs invConfigs;
-    InventoriesBlockLogger blockLogger;
     LapisInventoriesAPI api;
     ArrayList<UUID> inspectingPlayers = new ArrayList<>();
 

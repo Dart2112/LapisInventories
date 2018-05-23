@@ -3,7 +3,12 @@ version: ${project.version}
 main: net.lapsimc.lapisinventories.LapisInventories
 authors: [Dart2112]
 description: A basic GameMode based inventory management system
+commands:
+  lapisinventories:
+    description: Use "/lapisinventories help" for help
 permissions:
+  LapisInventories.import:
+    description: Players with this permission can run the import command to move data from other plugins
   LapisInventories.canDrop:
     decsription: Players with this permission will be able to drop items in creative
   LapisInventories.containerAccess:

@@ -23,9 +23,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.sql.*;
 import java.util.UUID;
 
-class InventoriesBlockLogger {
+public class InventoriesBlockLogger {
 
     private MySQLManager MySQL;
+    public UUID importedUUID = UUID.fromString("ImportedData");
 
     InventoriesBlockLogger(LapisInventories p) {
         if (p.getConfig().getBoolean("CreativeBlockTracking")) {
@@ -33,7 +34,7 @@ class InventoriesBlockLogger {
         }
     }
 
-    void addBlock(Block block, UUID uuid) {
+    public void addBlock(Block block, UUID uuid) {
         if (checkBlock(block)) {
             MySQL.setData(concatenateLocation(block), "Location", uuid.toString());
         } else {
@@ -43,7 +44,7 @@ class InventoriesBlockLogger {
 
     void removeBlock(Block block) {
         if (checkBlock(block)) {
-            MySQL.dropRow(checkPlacer(block).toString());
+            MySQL.dropRow(concatenateLocation(block));
         }
     }
 
@@ -62,7 +63,7 @@ class InventoriesBlockLogger {
     }
 
     private String concatenateLocation(Block b) {
-        return b.getX() + "," + b.getY() + "," + b.getX();
+        return b.getX() + "," + b.getY() + "," + b.getZ();
     }
 
 }
@@ -156,12 +157,12 @@ class MySQLManager {
         return null;
     }
 
-    void dropRow(String UUID) {
+    void dropRow(String location) {
         try {
             conn = getConnection();
-            String sqlUpdate = "DELETE FROM CreativeBlocks WHERE UUID = ?";
+            String sqlUpdate = "DELETE FROM CreativeBlocks WHERE Location = ?";
             PreparedStatement preStatement = conn.prepareStatement(sqlUpdate);
-            preStatement.setString(1, UUID);
+            preStatement.setString(1, location);
             preStatement.execute();
             preStatement.close();
         } catch (SQLException e) {
