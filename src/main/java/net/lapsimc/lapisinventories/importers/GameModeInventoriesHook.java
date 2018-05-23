@@ -16,27 +16,84 @@
 
 package net.lapsimc.lapisinventories.importers;
 
-import me.eccentric_nz.gamemodeinventories.GameModeInventoriesRequestAPI;
 import net.lapsimc.lapisinventories.LapisInventories;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.List;
 
 public class GameModeInventoriesHook {
+
+
+    private static final Method ADD_URL_METHOD;
+
+    static {
+        Method addUrlMethod;
+        try {
+            addUrlMethod = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+            addUrlMethod.setAccessible(true);
+        } catch (NoSuchMethodException e) {
+            throw new ExceptionInInitializerError(e);
+        }
+        ADD_URL_METHOD = addUrlMethod;
+    }
 
     private LapisInventories plugin;
 
     public GameModeInventoriesHook(LapisInventories p) {
         plugin = p;
-        injectCode();
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, this::injectCode);
     }
 
     private void injectCode() {
-
+        File jar = new File(plugin.getDataFolder() + File.separator + "GameModeInventoriesRequestAPI.jar");
+        if (!jar.exists()) {
+            try {
+                URL jarURL = new URL("https://github.com/LapisPlugins/LapisInventories/raw/master/RequestAPIs/GameModeInventoriesRequestAPI.jar");
+                ReadableByteChannel jarByteChannel = Channels.newChannel(jarURL.openStream());
+                if (!jar.exists()) {
+                    if (!jar.createNewFile()) {
+                        plugin.getLogger().info("Failed to download GameModeInventories code injection!");
+                        return;
+                    }
+                }
+                FileOutputStream jarOutputStream = new FileOutputStream(jar);
+                jarOutputStream.getChannel().transferFrom(jarByteChannel, 0, Long.MAX_VALUE);
+                jarByteChannel.close();
+                jarOutputStream.flush();
+                jarOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            Class.forName("me.eccentric_nz.gamemodeinventories.GameModeInventoriesRequestAPI");
+        } catch (ClassNotFoundException e) {
+            ClassLoader classLoader = getClass().getClassLoader();
+            if (classLoader instanceof URLClassLoader) {
+                try {
+                    ADD_URL_METHOD.invoke(classLoader, jar.toURI().toURL());
+                } catch (IllegalAccessException | InvocationTargetException | MalformedURLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        retrieveData();
+        jar.deleteOnExit();
     }
 
     private void retrieveData() {
-        List<Location> locations = new GameModeInventoriesRequestAPI().getBlocks();
+        List<Location> locations = new me.eccentric_nz.gamemodeinventories.GameModeInventoriesRequestAPI().getBlocks();
         for (Location l : locations) {
             plugin.blockLogger.addBlock(l.getBlock(), plugin.blockLogger.importedUUID);
         }
