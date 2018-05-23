@@ -30,7 +30,6 @@ public class InventoriesCommand implements CommandExecutor {
 
     InventoriesCommand(LapisInventories p) {
         plugin = p;
-        //TODO:setup command in plugin.yml
         p.getCommand("LapisInventories").setExecutor(this);
     }
 
@@ -56,7 +55,7 @@ public class InventoriesCommand implements CommandExecutor {
                 }
             } else if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
                 sendHelp(sender);
-            } else if (args.length == 1 && args[0].equalsIgnoreCase("convert")) {
+            } else if (args.length == 1 && args[0].equalsIgnoreCase("import")) {
                 boolean permitted;
                 if (!(sender instanceof Player)) {
                     permitted = true;
@@ -88,6 +87,7 @@ public class InventoriesCommand implements CommandExecutor {
         sender.sendMessage(primary + "/lapisinventories: " + secondary + "Displays plugin information");
         sender.sendMessage(primary + "/lapisinventories help: " + secondary + "Displays this information");
         sender.sendMessage(primary + "/lapisinventories inspect: " + secondary + "Enables creative block inspection");
+        sender.sendMessage(primary + "/lapisinventories import: " + secondary + "Imports data from other creative control plugins");
         sender.sendMessage(bars + bars + bars);
 
     }

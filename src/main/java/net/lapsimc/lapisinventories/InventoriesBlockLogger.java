@@ -25,8 +25,8 @@ import java.util.UUID;
 
 public class InventoriesBlockLogger {
 
+    public UUID importedUUID = UUID.nameUUIDFromBytes("Imported Data".getBytes());
     private MySQLManager MySQL;
-    public UUID importedUUID = UUID.fromString("ImportedData");
 
     InventoriesBlockLogger(LapisInventories p) {
         if (p.getConfig().getBoolean("CreativeBlockTracking")) {

@@ -3,6 +3,7 @@ version: ${project.version}
 main: net.lapsimc.lapisinventories.LapisInventories
 authors: [Dart2112]
 description: A basic GameMode based inventory management system
+softdepend: [GameModeInventories]
 commands:
   lapisinventories:
     description: Use "/lapisinventories help" for help

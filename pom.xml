@@ -97,8 +97,8 @@
         <!-- Dependencies for other inventory managers -->
         <dependency>
             <groupId>me.eccentric_nz.gamemodeinventories</groupId>
-            <artifactId>GameModeInventories</artifactId>
-            <version>2.9</version>
+            <artifactId>GameModeInventoriesRequestAPI</artifactId>
+            <version>0.1.0</version>
         </dependency>
     </dependencies>
 </project>

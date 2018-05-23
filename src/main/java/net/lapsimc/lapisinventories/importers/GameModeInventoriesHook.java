@@ -16,13 +16,10 @@
 
 package net.lapsimc.lapisinventories.importers;
 
-import me.eccentric_nz.gamemodeinventories.GameModeInventories;
+import me.eccentric_nz.gamemodeinventories.GameModeInventoriesRequestAPI;
 import net.lapsimc.lapisinventories.LapisInventories;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class GameModeInventoriesHook {
@@ -31,29 +28,15 @@ public class GameModeInventoriesHook {
 
     public GameModeInventoriesHook(LapisInventories p) {
         plugin = p;
-        if (Bukkit.getPluginManager().isPluginEnabled("GameModeInventories")) {
-            retrieveData();
-        }
+        injectCode();
+    }
+
+    private void injectCode() {
+
     }
 
     private void retrieveData() {
-        GameModeInventories gmi = (GameModeInventories) Bukkit.getPluginManager().getPlugin("GameModeInventories");
-        Collection<List<String>> gmiLocations = gmi.getCreativeBlocks().values();
-        List<Location> locations = new ArrayList<>();
-        for (List<String> list : gmiLocations) {
-            for (String s : list) {
-                //"Location{" + "world=" + world + ",x=" + x + ",y=" + y + ",z=" + z + ",pitch=" + pitch + ",yaw=" + yaw + '}'
-                String locFormatted = s.replace("Location{", "").replace("world=", "").replace("x=", "").replace("y=", "").replace("z=", "").replace("pitch=", "").replace("yaw=", "").replace("}", "");
-                String[] locArray = locFormatted.split(",");
-                if (Bukkit.getWorld(locArray[0]) != null) {
-                    //if the world exists
-                    Location loc = new Location(Bukkit.getWorld(locArray[0]), Double.valueOf(locArray[1]),
-                            Double.valueOf(locArray[2]), Double.valueOf(locArray[3]),
-                            Float.valueOf(locArray[4]), Float.valueOf(locArray[5]));
-                    locations.add(loc);
-                }
-            }
-        }
+        List<Location> locations = new GameModeInventoriesRequestAPI().getBlocks();
         for (Location l : locations) {
             plugin.blockLogger.addBlock(l.getBlock(), plugin.blockLogger.importedUUID);
         }
