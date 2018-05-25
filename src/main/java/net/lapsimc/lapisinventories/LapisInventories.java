@@ -41,6 +41,7 @@ public final class LapisInventories extends JavaPlugin {
         api = new LapisInventoriesAPI(this);
         new InventoriesListener(this);
         new InventoriesCommand(this);
+        new Metrics(this);
         getLogger().info("LapisInventories v." + getDescription().getVersion() + " has been enabled");
         checkForUpdates();
     }

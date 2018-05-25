@@ -100,8 +100,7 @@ public class InventoriesCommand implements CommandExecutor {
         sender.sendMessage(bars + primary + " Lapis Inventories " + bars);
         sender.sendMessage(primary + "Version: " + secondary + plugin.getDescription().getVersion());
         sender.sendMessage(primary + "Author: " + secondary + plugin.getDescription().getAuthors().get(0));
-        //TODO: get spigot link when setup
-        //sender.sendMessage(primary + "Spigot: " + secondary + "https://goo.gl/6edyJA");
+        sender.sendMessage(primary + "Spigot: " + secondary + "https://goo.gl/YCFo9k");
         sender.sendMessage(primary + "If you need help use " + secondary + "/lapisinventories help");
         sender.sendMessage(bars + bars + bars);
     }

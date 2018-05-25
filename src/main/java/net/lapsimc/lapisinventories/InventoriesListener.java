@@ -85,11 +85,7 @@ public class InventoriesListener implements Listener {
             //check if the block was placed in creative
             if (plugin.blockLogger.checkBlock(e.getClickedBlock())) {
                 //if it was we send a message with the players name inserted
-                if (plugin.blockLogger.checkPlacer(e.getClickedBlock()) == plugin.blockLogger.importedUUID) {
-                    e.getPlayer().sendMessage(plugin.invConfigs.getColoredMessage("BlockCheck.Positive").replace("%PLAYER%", "ImportedData"));
-                } else {
-                    e.getPlayer().sendMessage(plugin.invConfigs.getColoredMessage("BlockCheck.Positive").replace("%PLAYER%", Bukkit.getPlayer(plugin.blockLogger.checkPlacer(e.getClickedBlock())).getName()));
-                }
+                e.getPlayer().sendMessage(plugin.invConfigs.getColoredMessage("BlockCheck.Positive").replace("%PLAYER%", Bukkit.getPlayer(plugin.blockLogger.checkPlacer(e.getClickedBlock())).getName()));
             } else {
                 //otherwise we send a negative response
                 e.getPlayer().sendMessage(plugin.invConfigs.getColoredMessage("BlockCheck.Negative"));
