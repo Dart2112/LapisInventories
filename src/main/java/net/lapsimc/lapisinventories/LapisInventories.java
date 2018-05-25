@@ -23,7 +23,7 @@ import java.util.UUID;
 
 public final class LapisInventories extends JavaPlugin {
 
-    public InventoriesBlockLogger blockLogger;
+    InventoriesBlockLogger blockLogger;
     InventoryManager invManager;
     InventoriesConfigs invConfigs;
     LapisInventoriesAPI api;

@@ -74,14 +74,14 @@ public class InventoriesListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent e) {
         //if the player right clicks a container we want to check if they are in creative and are permitted to do that
         //if they are in creative but not permitted, then we cancel the event and send them a messsage
-        if (e.getClickedBlock().getState() instanceof Container && e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+        if (e.getClickedBlock().getState() != null && e.getClickedBlock().getState() instanceof Container && e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             if (e.getPlayer().getGameMode() == GameMode.CREATIVE && !e.getPlayer().hasPermission("LapisInventories.containerAccess")) {
                 e.setCancelled(true);
                 e.getPlayer().sendMessage(plugin.invConfigs.getColoredMessage("Denied.containerAccess"));
             }
         }
         //if the player is using a blaze rod to inspect a block
-        if (canInspect(e.getPlayer(), e.getItem())) {
+        if (canInspect(e.getPlayer(), e.getItem()) && e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             //check if the block was placed in creative
             if (plugin.blockLogger.checkBlock(e.getClickedBlock())) {
                 //if it was we send a message with the players name inserted

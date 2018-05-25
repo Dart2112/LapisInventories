@@ -99,6 +99,7 @@
             <groupId>me.eccentric_nz.gamemodeinventories</groupId>
             <artifactId>GameModeInventoriesRequestAPI</artifactId>
             <version>0.1.0</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

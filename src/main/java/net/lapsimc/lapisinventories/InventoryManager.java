@@ -81,10 +81,15 @@ class InventoryManager {
         ItemStack[] itemsArray = new ItemStack[items.size()];
         itemsArray = items.toArray(itemsArray);
         p.getInventory().setContents(itemsArray);
-        Float exp = (Float) playerData.get(gm.getValue() + ".exp");
-        p.setExp(exp);
-        playerData.set(gm.getValue() + ".inventory", null);
-        playerData.set(gm.getValue() + ".exp", null);
+        Double exp = playerData.getDouble(gm.getValue() + ".exp");
+        p.setExp(exp.floatValue());
+        try {
+            playerData.set(gm.getValue() + ".inventory", null);
+            playerData.set(gm.getValue() + ".exp", null);
+            playerData.save(playerDataFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

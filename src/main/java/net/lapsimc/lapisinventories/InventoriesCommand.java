@@ -16,8 +16,6 @@
 
 package net.lapsimc.lapisinventories;
 
-import net.lapsimc.lapisinventories.importers.GameModeInventoriesHook;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -55,21 +53,6 @@ public class InventoriesCommand implements CommandExecutor {
                 }
             } else if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
                 sendHelp(sender);
-            } else if (args.length == 1 && args[0].equalsIgnoreCase("import")) {
-                boolean permitted;
-                if (!(sender instanceof Player)) {
-                    permitted = true;
-                } else {
-                    Player p = (Player) sender;
-                    permitted = p.hasPermission("LapisInventories.import");
-                }
-                if (!permitted) {
-                    sender.sendMessage(plugin.invConfigs.getColoredMessage("Error.NotPermitted"));
-                }
-                if (Bukkit.getPluginManager().isPluginEnabled("GameModeInventories")) {
-                    new GameModeInventoriesHook(plugin);
-                    sender.sendMessage("Starting import from GameModeInventories\nCheck console for updates");
-                }
             } else {
                 pluginInfo(sender);
             }
@@ -87,7 +70,6 @@ public class InventoriesCommand implements CommandExecutor {
         sender.sendMessage(primary + "/lapisinventories: " + secondary + "Displays plugin information");
         sender.sendMessage(primary + "/lapisinventories help: " + secondary + "Displays this information");
         sender.sendMessage(primary + "/lapisinventories inspect: " + secondary + "Enables creative block inspection");
-        sender.sendMessage(primary + "/lapisinventories import: " + secondary + "Imports data from other creative control plugins");
         sender.sendMessage(bars + bars + bars);
 
     }
