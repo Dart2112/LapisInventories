@@ -7,3 +7,7 @@
 1.0.1:
   - "Added metrics"
   - "Added spigot link to plugin info"
+1.0.2:
+  - "Minor bug fixes"
+  - "Location data for creative blocks now includes world"
+  - "Because of this all current data will be lost for creative blocks"

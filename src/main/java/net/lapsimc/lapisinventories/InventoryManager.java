@@ -38,7 +38,9 @@ class InventoryManager {
     }
 
     void saveInventory(Player p, GameMode gm) {
+        //if they are in adventure mode we don't care
         if (gm.getValue() == 3) return;
+        //get the players inventory
         Inventory inv = p.getInventory();
         File playerDataFile = new File(inventoriesFile + File.separator + p.getUniqueId() + ".yml");
         if (!playerDataFile.exists()) {
@@ -49,12 +51,16 @@ class InventoryManager {
             }
         }
         YamlConfiguration playerData = YamlConfiguration.loadConfiguration(playerDataFile);
+        //if there inventory is already saved there has probably been a problem so we wont overwrite it
         if (playerData.contains(gm.getValue() + ".inventory")) {
             return;
         }
         try {
+            //get a List of the inventory items and set it in the config
             playerData.set(gm.getValue() + ".inventory", Arrays.asList(inv.getContents()));
+            //get the current EXP level and set it in the config
             playerData.set(gm.getValue() + ".exp", p.getExp());
+            //save the file to disk
             playerData.save(playerDataFile);
         } catch (IOException e) {
             e.printStackTrace();
@@ -63,6 +69,7 @@ class InventoryManager {
     }
 
     void loadInventory(Player p, GameMode gm) {
+        //we don't store spectator mode inventories so we cant load it either, so we don't even try
         if (gm.getValue() == 3) return;
         File playerDataFile = new File(inventoriesFile + File.separator + p.getUniqueId() + ".yml");
         if (!playerDataFile.exists()) {
@@ -73,17 +80,23 @@ class InventoryManager {
             }
         }
         YamlConfiguration playerData = YamlConfiguration.loadConfiguration(playerDataFile);
+        //if we don't have an inventory to load simply clear the players inventory and set EXP to 0
         if (!playerData.contains(gm.getValue() + ".inventory")) {
             p.getInventory().clear();
+            p.setExp(0.0f);
             return;
         }
+        //load the inventory items as a list and then convert it to an array
         @SuppressWarnings("unchecked") List<ItemStack> items = (List<ItemStack>) playerData.get(gm.getValue() + ".inventory");
         ItemStack[] itemsArray = new ItemStack[items.size()];
         itemsArray = items.toArray(itemsArray);
+        //set the player inventory with the array
         p.getInventory().setContents(itemsArray);
+        //get the EXP double from the config and convert it to a float and set the players EXP
         Double exp = playerData.getDouble(gm.getValue() + ".exp");
         p.setExp(exp.floatValue());
         try {
+            //set them all as null so that we know they are loaded
             playerData.set(gm.getValue() + ".inventory", null);
             playerData.set(gm.getValue() + ".exp", null);
             playerData.save(playerDataFile);

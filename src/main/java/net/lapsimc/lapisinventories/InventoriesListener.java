@@ -17,6 +17,7 @@
 package net.lapsimc.lapisinventories;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Container;
@@ -43,6 +44,15 @@ public class InventoriesListener implements Listener {
         //if there is a login plugin registered we wont give the player their inventory yet
         if (plugin.api.getHooks().size() == 0) {
             plugin.invManager.loadInventory(e.getPlayer(), e.getPlayer().getGameMode());
+        }
+        //if the player is permitted to install updates we start a async task to check for updates
+        if (e.getPlayer().hasPermission("LapisInventories.canUpdate")) {
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+                if (plugin.updater.checkUpdate()) {
+                    //if there is an update we notify the player and give them the command to install said update
+                    e.getPlayer().sendMessage(ChatColor.GOLD + "An update is available for LapisInventories, use /lapisinventories update to  download it");
+                }
+            });
         }
     }
 
