@@ -23,9 +23,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.sql.*;
 import java.util.UUID;
 
-public class InventoriesBlockLogger {
+class InventoriesBlockLogger {
 
-    public UUID importedUUID = UUID.nameUUIDFromBytes("Imported Data".getBytes());
     private MySQLManager MySQL;
 
     InventoriesBlockLogger(LapisInventories p) {
@@ -34,7 +33,7 @@ public class InventoriesBlockLogger {
         }
     }
 
-    public void addBlock(Block block, UUID uuid) {
+    void addBlock(Block block, UUID uuid) {
         if (checkBlock(block)) {
             MySQL.setData(concatenateLocation(block), "Location", uuid.toString());
         } else {
@@ -116,6 +115,7 @@ class MySQLManager {
         }
     }
 
+    @SuppressWarnings("SameParameterValue")
     void setData(String location, String path, String uuid) {
         try {
             conn = getConnection();
@@ -168,32 +168,6 @@ class MySQLManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public ResultSet getAllRows() {
-        try {
-            conn = getConnection();
-            Statement stmt = conn.createStatement();
-            String sql = "SELECT * FROM CreativeBlocks";
-            return stmt.executeQuery(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public Integer getRows() {
-        try {
-            conn = getConnection();
-            Statement stmt = conn.createStatement();
-            String sql = "SELECT * FROM CreativeBlocks";
-            ResultSet rs = stmt.executeQuery(sql);
-            rs.last();
-            return rs.getRow();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
     }
 
     private boolean isConnected() {

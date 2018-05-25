@@ -1,5 +1,12 @@
-ConfigVersion: 1
+ConfigVersion: 2
 
+Update:
+  #When enabled the plugin will check for updates and notify console whether an update is available
+  check: true
+  #When enabled the plugin will automatically download and install new updates when available
+  download: false
+  #When enabled and an update is available any players with LapisInventories.canUpdate will be notified
+  notify: true
 #This will stop survival players from getting item drops if the block was placed in creative mode, REQUIRES DATABASE ACCESS
 CreativeBlockTracking: false
 #Database settings for if you wish to use a Database as your data store

@@ -21,14 +21,15 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
 
-public class InventoriesConfigs {
+class InventoriesConfigurations {
 
     private LapisInventories plugin;
     private YamlConfiguration messages;
 
-    InventoriesConfigs(LapisInventories p) {
+    InventoriesConfigurations(LapisInventories p) {
         plugin = p;
         loadMessages();
+        checkConfigVersion();
     }
 
     private void loadMessages() {
@@ -48,11 +49,32 @@ public class InventoriesConfigs {
         messages = YamlConfiguration.loadConfiguration(messagesFile);
     }
 
-    public String getMessage(String key) {
+    private void checkConfigVersion() {
+        if (plugin.getConfig().getInt("ConfigVersion") != 5) {
+            File oldConfig = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "config_old.yml");
+            File newConfig = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "config.yml");
+            if (!newConfig.renameTo(oldConfig)) {
+                plugin.getLogger().info(plugin.getName() + " failed to update the config.yml");
+            }
+            plugin.saveDefaultConfig();
+
+            loadMessages();
+            File messagesFile = new File(plugin.getDataFolder(), "messages.yml");
+            File oldMessages = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "Messages_old.yml");
+            if (!messagesFile.renameTo(oldMessages)) {
+                plugin.getLogger().info(plugin.getName() + " failed to update the Messages.yml");
+            }
+            loadMessages();
+            plugin.getLogger().info("New Configuration Generated for " + plugin.getName() + "," +
+                    " Please Transfer Values From config_old.yml & Messages_old.yml");
+        }
+    }
+
+    String getMessage(String key) {
         return ChatColor.stripColor(getColoredMessage(key));
     }
 
-    public String getColoredMessage(String key) {
+    String getColoredMessage(String key) {
         loadMessages();
         return ChatColor.translateAlternateColorCodes('&', messages.getString(key));
     }

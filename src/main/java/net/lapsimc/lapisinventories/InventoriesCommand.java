@@ -51,6 +51,24 @@ public class InventoriesCommand implements CommandExecutor {
                     plugin.inspectingPlayers.add(p.getUniqueId());
                     p.sendMessage(plugin.invConfigs.getColoredMessage("CheckBlock.Enabled"));
                 }
+            } else if (args.length == 1 & args[0].equalsIgnoreCase("update")) {
+                boolean permitted;
+                if (sender instanceof Player) {
+                    Player p = (Player) sender;
+                    permitted = p.hasPermission("LapisInventories.canUpdate");
+                } else {
+                    permitted = true;
+                }
+                if (!permitted) {
+                    sender.sendMessage(plugin.invConfigs.getColoredMessage("Error.NotPermitted"));
+                    return true;
+                }
+                if (plugin.updater.checkUpdate()) {
+                    sender.sendMessage("An update is available, it is being downloaded now and will be installed when the server restarts");
+                    plugin.updater.downloadUpdate();
+                } else {
+                    sender.sendMessage("No update available");
+                }
             } else if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
                 sendHelp(sender);
             } else {
@@ -70,6 +88,7 @@ public class InventoriesCommand implements CommandExecutor {
         sender.sendMessage(primary + "/lapisinventories: " + secondary + "Displays plugin information");
         sender.sendMessage(primary + "/lapisinventories help: " + secondary + "Displays this information");
         sender.sendMessage(primary + "/lapisinventories inspect: " + secondary + "Enables creative block inspection");
+        sender.sendMessage(primary + "/lapisinventories update: " + secondary + "Checks for and installs updates");
         sender.sendMessage(bars + bars + bars);
 
     }

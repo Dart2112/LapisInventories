@@ -16,3 +16,5 @@ permissions:
     description: Players with this permission will be able to check if a block was placed in creative with a blaze rod
   LapisInventories.bypassLogging:
     description: Players with this permission will not have creative blocks logged
+  LapisInventories.canUpdate:
+    decsription: Players with this permission will be able to download updates with /lapisinventories update, they will also be notified of updates
