@@ -11,3 +11,6 @@
   - "Minor bug fixes"
   - "Location data for creative blocks now includes world"
   - "Because of this all current data will be lost for creative blocks"
+1.0.3:
+  - "Fixed null pointer exception"
+  - "Fixed login plugin integration"

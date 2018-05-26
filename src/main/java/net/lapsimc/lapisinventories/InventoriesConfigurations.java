@@ -50,7 +50,7 @@ class InventoriesConfigurations {
     }
 
     private void checkConfigVersion() {
-        if (plugin.getConfig().getInt("ConfigVersion") != 5) {
+        if (plugin.getConfig().getInt("ConfigVersion") != 2) {
             File oldConfig = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "config_old.yml");
             File newConfig = new File(plugin.getDataFolder().getAbsolutePath() + File.separator + "config.yml");
             if (!newConfig.renameTo(oldConfig)) {

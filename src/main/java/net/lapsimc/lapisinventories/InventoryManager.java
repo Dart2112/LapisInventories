@@ -51,10 +51,6 @@ class InventoryManager {
             }
         }
         YamlConfiguration playerData = YamlConfiguration.loadConfiguration(playerDataFile);
-        //if there inventory is already saved there has probably been a problem so we wont overwrite it
-        if (playerData.contains(gm.getValue() + ".inventory")) {
-            return;
-        }
         try {
             //get a List of the inventory items and set it in the config
             playerData.set(gm.getValue() + ".inventory", Arrays.asList(inv.getContents()));
@@ -95,14 +91,6 @@ class InventoryManager {
         //get the EXP double from the config and convert it to a float and set the players EXP
         Double exp = playerData.getDouble(gm.getValue() + ".exp");
         p.setExp(exp.floatValue());
-        try {
-            //set them all as null so that we know they are loaded
-            playerData.set(gm.getValue() + ".inventory", null);
-            playerData.set(gm.getValue() + ".exp", null);
-            playerData.save(playerDataFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 

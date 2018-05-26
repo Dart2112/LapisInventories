@@ -20,6 +20,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -83,8 +84,8 @@ public class InventoriesListener implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
         //if the player right clicks a container we want to check if they are in creative and are permitted to do that
-        //if they are in creative but not permitted, then we cancel the event and send them a messsage
-        if (e.getClickedBlock().getState() != null && e.getClickedBlock().getState() instanceof Container && e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+        //if they are in creative but not permitted, then we cancel the event and send them a message
+        if (isBlockContainer(e.getClickedBlock()) && e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             if (e.getPlayer().getGameMode() == GameMode.CREATIVE && !e.getPlayer().hasPermission("LapisInventories.containerAccess")) {
                 e.setCancelled(true);
                 e.getPlayer().sendMessage(plugin.invConfigs.getColoredMessage("Denied.containerAccess"));
@@ -101,6 +102,18 @@ public class InventoriesListener implements Listener {
                 e.getPlayer().sendMessage(plugin.invConfigs.getColoredMessage("BlockCheck.Negative"));
             }
         }
+    }
+
+    private boolean isBlockContainer(Block b) {
+        if (b == null) return false;
+        Material mat = b.getType();
+        //This is to avoid null pointers when blind checking the block state
+        if (mat.equals(Material.CHEST) || mat.equals(Material.TRAPPED_CHEST) || mat.equals(Material.ENDER_CHEST)
+                || mat.equals(Material.HOPPER) || mat.equals(Material.STORAGE_MINECART) || mat.equals(Material.HOPPER_MINECART)
+                || mat.equals(Material.FURNACE) || mat.equals(Material.BURNING_FURNACE) || mat.equals(Material.POWERED_MINECART)) {
+            return b.getState() instanceof Container;
+        }
+        return false;
     }
 
     private boolean canInspect(Player p, ItemStack item) {
