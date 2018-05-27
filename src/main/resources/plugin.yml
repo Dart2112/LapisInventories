@@ -8,7 +8,7 @@ commands:
     description: Use "/lapisinventories help" for help
 permissions:
   LapisInventories.canDrop:
-    decsription: Players with this permission will be able to drop items in creative
+    decsription: Players with this permission will be able to drop/pickup items in creative
   LapisInventories.containerAccess:
     description: Players with this permission will be able to access containers in creative
   LapisInventories.checkBlocks:

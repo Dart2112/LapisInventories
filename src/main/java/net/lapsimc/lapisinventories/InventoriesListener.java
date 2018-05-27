@@ -28,6 +28,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
@@ -82,6 +83,18 @@ public class InventoriesListener implements Listener {
     }
 
     @EventHandler
+    public void onItemPickup(EntityPickupItemEvent e) {
+        //If the player is in creative and isn't explicitly allowed to pickup items, we will cancel the event and send them a message
+        if (e.getEntity() instanceof Player) {
+            Player p = (Player) e.getEntity();
+            if (p.getGameMode() == GameMode.CREATIVE && !p.hasPermission("LapisInventories.canDrop")) {
+                e.setCancelled(true);
+                p.sendMessage(plugin.invConfigs.getColoredMessage("Denied.itemPickup"));
+            }
+        }
+    }
+
+    @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
         //if the player right clicks a container we want to check if they are in creative and are permitted to do that
         //if they are in creative but not permitted, then we cancel the event and send them a message
@@ -102,6 +115,14 @@ public class InventoriesListener implements Listener {
                 e.getPlayer().sendMessage(plugin.invConfigs.getColoredMessage("BlockCheck.Negative"));
             }
         }
+        //stop the player from throwing EXP bottles unless they are allowed to drop items
+        if (e.getPlayer().getGameMode().equals(GameMode.CREATIVE) && e.getAction().equals(Action.RIGHT_CLICK_BLOCK)
+                || e.getAction().equals(Action.RIGHT_CLICK_AIR)) {
+            if (e.getItem().getType().equals(Material.EXP_BOTTLE)) {
+                e.setCancelled(true);
+                e.getPlayer().sendMessage(plugin.invConfigs.getColoredMessage("Denied.itemThrow"));
+            }
+        }
     }
 
     private boolean isBlockContainer(Block b) {
@@ -110,7 +131,8 @@ public class InventoriesListener implements Listener {
         //This is to avoid null pointers when blind checking the block state
         if (mat.equals(Material.CHEST) || mat.equals(Material.TRAPPED_CHEST) || mat.equals(Material.ENDER_CHEST)
                 || mat.equals(Material.HOPPER) || mat.equals(Material.STORAGE_MINECART) || mat.equals(Material.HOPPER_MINECART)
-                || mat.equals(Material.FURNACE) || mat.equals(Material.BURNING_FURNACE) || mat.equals(Material.POWERED_MINECART)) {
+                || mat.equals(Material.FURNACE) || mat.equals(Material.BURNING_FURNACE) || mat.equals(Material.POWERED_MINECART)
+                || mat.equals(Material.DISPENSER) || mat.equals(Material.DROPPER)) {
             return b.getState() instanceof Container;
         }
         return false;
