@@ -93,5 +93,19 @@ class InventoryManager {
         p.setExp(exp.floatValue());
     }
 
+    boolean hasInventory(Player p, GameMode gm) {
+        if (gm.getValue() == 3) return true;
+        File playerDataFile = new File(inventoriesFile + File.separator + p.getUniqueId() + ".yml");
+        if (!playerDataFile.exists()) {
+            try {
+                playerDataFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        YamlConfiguration playerData = YamlConfiguration.loadConfiguration(playerDataFile);
+        return playerData.contains(gm.getValue() + ".inventory");
+    }
+
 
 }

@@ -36,7 +36,7 @@ public class InventoriesCommand implements CommandExecutor {
         if (cmd.getName().equalsIgnoreCase("LapisInventories")) {
             if (args.length == 1 && args[0].equalsIgnoreCase("inspect")) {
                 if (!(sender instanceof Player)) {
-                    sender.sendMessage(plugin.invConfigs.getMessage("Error.MustBePlayer"));
+                    sender.sendMessage(plugin.invConfigs.getColoredMessage("Error.MustBePlayer"));
                     return true;
                 }
                 Player p = (Player) sender;

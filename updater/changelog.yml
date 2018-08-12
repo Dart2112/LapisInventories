@@ -14,3 +14,5 @@
 1.0.3:
   - "Fixed null pointer exception"
   - "Fixed login plugin integration"
+1.0.4:
+- "Updated for 1.13"

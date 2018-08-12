@@ -16,6 +16,7 @@
 
 package net.lapsimc.lapisinventories;
 
+import me.kangarko.compatbridge.model.CompMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -43,6 +44,10 @@ public class InventoriesListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
+        //Clear the inventory if we have something stored
+        if (plugin.invManager.hasInventory(e.getPlayer(), e.getPlayer().getGameMode())) {
+            e.getPlayer().getInventory().clear();
+        }
         //if there is a login plugin registered we wont give the player their inventory yet
         if (plugin.api.getHooks().size() == 0) {
             plugin.invManager.loadInventory(e.getPlayer(), e.getPlayer().getGameMode());
@@ -118,7 +123,7 @@ public class InventoriesListener implements Listener {
         //stop the player from throwing EXP bottles unless they are allowed to drop items
         if (e.getPlayer().getGameMode().equals(GameMode.CREATIVE) && e.getAction().equals(Action.RIGHT_CLICK_BLOCK)
                 || e.getAction().equals(Action.RIGHT_CLICK_AIR)) {
-            if (e.getItem().getType().equals(Material.EXP_BOTTLE)) {
+            if (e.getItem().getType().equals(CompMaterial.EXPERIENCE_BOTTLE.getMaterial())) {
                 e.setCancelled(true);
                 e.getPlayer().sendMessage(plugin.invConfigs.getColoredMessage("Denied.itemThrow"));
             }
@@ -127,15 +132,12 @@ public class InventoriesListener implements Listener {
 
     private boolean isBlockContainer(Block b) {
         if (b == null) return false;
-        Material mat = b.getType();
         //This is to avoid null pointers when blind checking the block state
-        if (mat.equals(Material.CHEST) || mat.equals(Material.TRAPPED_CHEST) || mat.equals(Material.ENDER_CHEST)
-                || mat.equals(Material.HOPPER) || mat.equals(Material.STORAGE_MINECART) || mat.equals(Material.HOPPER_MINECART)
-                || mat.equals(Material.FURNACE) || mat.equals(Material.BURNING_FURNACE) || mat.equals(Material.POWERED_MINECART)
-                || mat.equals(Material.DISPENSER) || mat.equals(Material.DROPPER)) {
+        try {
             return b.getState() instanceof Container;
+        } catch (NullPointerException e) {
+            return false;
         }
-        return false;
     }
 
     private boolean canInspect(Player p, ItemStack item) {

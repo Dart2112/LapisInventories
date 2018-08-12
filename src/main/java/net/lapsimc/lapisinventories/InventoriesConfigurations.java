@@ -70,10 +70,6 @@ class InventoriesConfigurations {
         }
     }
 
-    String getMessage(String key) {
-        return ChatColor.stripColor(getColoredMessage(key));
-    }
-
     String getColoredMessage(String key) {
         loadMessages();
         return ChatColor.translateAlternateColorCodes('&', messages.getString(key));
