@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Benjamin Martin
+ * Copyright 2020 Benjamin Martin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package net.lapsimc.lapisinventories;
 
-import me.kangarko.compatbridge.model.CompMaterial;
+import net.lapismc.lapiscore.compatibility.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -35,7 +35,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class InventoriesListener implements Listener {
 
-    private LapisInventories plugin;
+    private final LapisInventories plugin;
 
     InventoriesListener(LapisInventories p) {
         plugin = p;
@@ -83,7 +83,7 @@ public class InventoriesListener implements Listener {
         //If the player is in creative and isn't explicitly allowed to drop items, we will cancel the event and send them a message
         if (e.getPlayer().getGameMode() == GameMode.CREATIVE && !e.getPlayer().hasPermission("LapisInventories.canDrop")) {
             e.setCancelled(true);
-            e.getPlayer().sendMessage(plugin.invConfigs.getColoredMessage("Denied.itemDrop"));
+            e.getPlayer().sendMessage(plugin.config.getMessage("Denied.itemDrop"));
         }
     }
 
@@ -94,7 +94,7 @@ public class InventoriesListener implements Listener {
             Player p = (Player) e.getEntity();
             if (p.getGameMode() == GameMode.CREATIVE && !p.hasPermission("LapisInventories.canDrop")) {
                 e.setCancelled(true);
-                p.sendMessage(plugin.invConfigs.getColoredMessage("Denied.itemPickup"));
+                p.sendMessage(plugin.config.getMessage("Denied.itemPickup"));
             }
         }
     }
@@ -106,7 +106,7 @@ public class InventoriesListener implements Listener {
         if (isBlockContainer(e.getClickedBlock()) && e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             if (e.getPlayer().getGameMode() == GameMode.CREATIVE && !e.getPlayer().hasPermission("LapisInventories.containerAccess")) {
                 e.setCancelled(true);
-                e.getPlayer().sendMessage(plugin.invConfigs.getColoredMessage("Denied.containerAccess"));
+                e.getPlayer().sendMessage(plugin.config.getMessage("Denied.containerAccess"));
             }
         }
         //if the player is using a blaze rod to inspect a block
@@ -114,18 +114,18 @@ public class InventoriesListener implements Listener {
             //check if the block was placed in creative
             if (plugin.blockLogger.checkBlock(e.getClickedBlock())) {
                 //if it was we send a message with the players name inserted
-                e.getPlayer().sendMessage(plugin.invConfigs.getColoredMessage("BlockCheck.Positive").replace("%PLAYER%", Bukkit.getPlayer(plugin.blockLogger.checkPlacer(e.getClickedBlock())).getName()));
+                e.getPlayer().sendMessage(plugin.config.getMessage("BlockCheck.Positive").replace("%PLAYER%", Bukkit.getPlayer(plugin.blockLogger.checkPlacer(e.getClickedBlock())).getName()));
             } else {
                 //otherwise we send a negative response
-                e.getPlayer().sendMessage(plugin.invConfigs.getColoredMessage("BlockCheck.Negative"));
+                e.getPlayer().sendMessage(plugin.config.getMessage("BlockCheck.Negative"));
             }
         }
         //stop the player from throwing EXP bottles unless they are allowed to drop items
         if (e.getPlayer().getGameMode().equals(GameMode.CREATIVE) && e.getAction().equals(Action.RIGHT_CLICK_BLOCK)
                 || e.getAction().equals(Action.RIGHT_CLICK_AIR)) {
-            if (e.getItem().getType().equals(CompMaterial.EXPERIENCE_BOTTLE.getMaterial())) {
+            if (e.getItem().getType().equals(XMaterial.EXPERIENCE_BOTTLE.parseMaterial())) {
                 e.setCancelled(true);
-                e.getPlayer().sendMessage(plugin.invConfigs.getColoredMessage("Denied.itemThrow"));
+                e.getPlayer().sendMessage(plugin.config.getMessage("Denied.itemThrow"));
             }
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Benjamin Martin
+ * Copyright 2020 Benjamin Martin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import org.bukkit.entity.Player;
 
 public class InventoriesCommand implements CommandExecutor {
 
-    private LapisInventories plugin;
+    private final LapisInventories plugin;
 
     InventoriesCommand(LapisInventories p) {
         plugin = p;
@@ -36,20 +36,20 @@ public class InventoriesCommand implements CommandExecutor {
         if (cmd.getName().equalsIgnoreCase("LapisInventories")) {
             if (args.length == 1 && args[0].equalsIgnoreCase("inspect")) {
                 if (!(sender instanceof Player)) {
-                    sender.sendMessage(plugin.invConfigs.getColoredMessage("Error.MustBePlayer"));
+                    sender.sendMessage(plugin.config.getMessage("Error.MustBePlayer"));
                     return true;
                 }
                 Player p = (Player) sender;
                 if (!p.hasPermission("LapisInventories.checkBlocks")) {
-                    p.sendMessage(plugin.invConfigs.getColoredMessage("Error.NotPermitted"));
+                    p.sendMessage(plugin.config.getMessage("Error.NotPermitted"));
                     return true;
                 }
                 if (plugin.inspectingPlayers.contains(p.getUniqueId())) {
                     plugin.inspectingPlayers.remove(p.getUniqueId());
-                    p.sendMessage(plugin.invConfigs.getColoredMessage("CheckBlock.Disabled"));
+                    p.sendMessage(plugin.config.getMessage("CheckBlock.Disabled"));
                 } else {
                     plugin.inspectingPlayers.add(p.getUniqueId());
-                    p.sendMessage(plugin.invConfigs.getColoredMessage("CheckBlock.Enabled"));
+                    p.sendMessage(plugin.config.getMessage("CheckBlock.Enabled"));
                 }
             } else if (args.length == 1 & args[0].equalsIgnoreCase("update")) {
                 boolean permitted;
@@ -60,7 +60,7 @@ public class InventoriesCommand implements CommandExecutor {
                     permitted = true;
                 }
                 if (!permitted) {
-                    sender.sendMessage(plugin.invConfigs.getColoredMessage("Error.NotPermitted"));
+                    sender.sendMessage(plugin.config.getMessage("Error.NotPermitted"));
                     return true;
                 }
                 if (plugin.updater.checkUpdate()) {

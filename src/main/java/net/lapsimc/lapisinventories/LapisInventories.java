@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Benjamin Martin
+ * Copyright 2020 Benjamin Martin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +16,28 @@
 
 package net.lapsimc.lapisinventories;
 
+import net.lapismc.lapiscore.LapisCoreConfiguration;
+import net.lapismc.lapiscore.LapisCorePlugin;
+import net.lapismc.lapiscore.utils.LapisUpdater;
+import net.lapismc.lapiscore.utils.Metrics;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
-public final class LapisInventories extends JavaPlugin {
+public final class LapisInventories extends LapisCorePlugin {
 
     LapisUpdater updater;
     LapisInventoriesAPI api;
     InventoryManager invManager;
-    InventoriesConfigurations invConfigs;
     InventoriesBlockLogger blockLogger;
     ArrayList<UUID> inspectingPlayers = new ArrayList<>();
 
     @Override
     public void onEnable() {
-        saveDefaultConfig();
+        registerConfiguration(new LapisCoreConfiguration(this, 2, 1));
         updater = new LapisUpdater(this, "LapisInventories", "LapisPlugins", "LapisInventories", "master");
         blockLogger = new InventoriesBlockLogger(this);
-        invConfigs = new InventoriesConfigurations(this);
         invManager = new InventoryManager(this);
         api = new LapisInventoriesAPI(this);
         new InventoriesListener(this);

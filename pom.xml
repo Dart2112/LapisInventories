@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2018 Benjamin Martin
+  ~ Copyright 2020 Benjamin Martin
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@
 
     <build>
         <finalName>${project.name}</finalName>
-        <defaultGoal>clean install</defaultGoal>
+        <defaultGoal>clean package</defaultGoal>
         <plugins>
             <plugin>
                 <version>3.6.1</version>
@@ -59,8 +59,8 @@
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <relocations>
                                 <relocation>
-                                    <pattern>me.kangarko.compatbridge</pattern>
-                                    <shadedPattern>net.lapismc.lapisinventories.shaded.bridge</shadedPattern>
+                                    <pattern>net.lapismc.lapiscore</pattern>
+                                    <shadedPattern>net.lapismc.lapisinventories.core</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
@@ -85,10 +85,6 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -99,15 +95,15 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.kangarko</groupId>
-            <artifactId>CompatBridge</artifactId>
-            <version>1.0.1</version>
+            <groupId>net.lapismc</groupId>
+            <artifactId>LapisCore</artifactId>
+            <version>1.7.7</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.13-R0.1-SNAPSHOT</version>
+            <version>1.15.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
