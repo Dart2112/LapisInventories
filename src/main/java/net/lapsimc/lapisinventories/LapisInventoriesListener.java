@@ -17,8 +17,15 @@
 package net.lapsimc.lapisinventories;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.block.Block;
+import org.bukkit.block.Container;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -46,7 +53,45 @@ public class LapisInventoriesListener implements Listener {
 
     @EventHandler
     public void onGamemodeChange(PlayerGameModeChangeEvent e) {
+        //TODO: Maybe add permission checks here, if I want to allow a single inventory permission
         plugin.getPlayer(e.getPlayer().getUniqueId()).processGamemodeChange(e.getNewGameMode());
+    }
+
+    /*
+    Process creative controls
+     */
+
+    @EventHandler
+    public void onItemDrop(PlayerDropItemEvent e) {
+        //TODO: Add permissions checks here
+        if (e.getPlayer().getGameMode().equals(GameMode.CREATIVE))
+            e.setCancelled(true);
+        //TODO: Send messages about what happened
+    }
+
+    @EventHandler
+    public void onInventoryOpen(InventoryOpenEvent e) {
+        if (e.getInventory().getHolder() instanceof Container) {
+            e.setCancelled(true);
+            //TODO: Send messages about what happened
+        }
+    }
+
+    /*
+    Track block place/break
+     */
+
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent e) {
+        if (e.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
+            Block placed = e.getBlockPlaced();
+            //TODO: Check permissions and save the block
+        }
+    }
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent e) {
+        //TODO: Lookup the block and see if it was placed in creative, set drops to null if it was placed with creative
     }
 
 }

@@ -24,7 +24,7 @@ import java.util.UUID;
 
 public final class LapisInventories extends LapisCorePlugin {
 
-    HashMap<UUID, LapisInventoriesPlayer> players = new HashMap<>();
+    private final HashMap<UUID, LapisInventoriesPlayer> players = new HashMap<>();
 
     @Override
     public void onEnable() {

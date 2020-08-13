@@ -1,5 +1,5 @@
-Inventories for each gamemode
-Save the current inventory on the current gamemode and then wait a tick to load the new gamemodes inventory if the event wasnt cancelled
+DONE    Inventories for each gamemode
+DONE    Save the current inventory on the current gamemode and then wait a tick to load the new gamemodes inventory if the event wasnt cancelled
 Allow tracking of creative blocks, probably SQLite or other file based storage
-Item drops and container blocking
+DONE    Item drops and container blocking
 Login plugin support (LapisLogin)
