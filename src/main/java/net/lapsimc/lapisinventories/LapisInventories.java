@@ -16,7 +16,9 @@
 
 package net.lapsimc.lapisinventories;
 
+import net.lapismc.lapiscore.LapisCoreConfiguration;
 import net.lapismc.lapiscore.LapisCorePlugin;
+import net.lapismc.lapiscore.utils.Metrics;
 import net.lapsimc.lapisinventories.playerdata.LapisInventoriesPlayer;
 
 import java.util.HashMap;
@@ -28,7 +30,10 @@ public final class LapisInventories extends LapisCorePlugin {
 
     @Override
     public void onEnable() {
-
+        registerConfiguration(new LapisCoreConfiguration(this, 1, 1));
+        registerPermissions(new LapisInventoriesPermissions(this));
+        new LapisInventoriesListener(this);
+        new Metrics(this);
     }
 
     @Override

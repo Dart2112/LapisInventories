@@ -3,3 +3,7 @@ DONE    Save the current inventory on the current gamemode and then wait a tick 
 Allow tracking of creative blocks, probably SQLite or other file based storage
 DONE    Item drops and container blocking
 Login plugin support (LapisLogin)
+
+Permissions:
+InventoryControl
+TrackBlockPlacing
