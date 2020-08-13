@@ -1,15 +1,1 @@
 ConfigVersion: 1
-
-CheckBlock:
-  Enabled: "Check block mode enabled"
-  Disabled: "Check block mode disabled"
-  Positive: "This block was placed in creative by %PLAYER%"
-  Negative: "There is no data stored for this block"
-Denied:
-  itemDrop: "&cYou aren't allowed to drop items in creative mode!"
-  itemPickup: "&cYou aren't allowed to pickup items in creative mode!"
-  itemThrow: "&cYou aren't allowed to throw items in creative mode!"
-  containerAccess: "&cYou aren't allowed to access containers in creative mode!"
-Error:
-  MustBePlayer: "You must be a player to use this command!"
-  NotPermitted: "&cYou are not permitted to do this!"
