@@ -17,6 +17,10 @@
 package net.lapsimc.lapisinventories.playerdata;
 
 import net.lapsimc.lapisinventories.LapisInventories;
+import net.lapsimc.lapisinventories.api.events.InventoryHideEvent;
+import net.lapsimc.lapisinventories.api.events.InventoryLoadEvent;
+import net.lapsimc.lapisinventories.api.events.InventoryRestoreEvent;
+import net.lapsimc.lapisinventories.api.events.InventorySaveEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -83,6 +87,7 @@ public class LapisInventoriesPlayer {
         Player p = Bukkit.getPlayer(uuid);
         PlayerInventory inv = p.getInventory();
         dataYaml.set("inventories." + p.getGameMode().name(), inv.getContents());
+        Bukkit.getPluginManager().callEvent(new InventorySaveEvent(p, inv, p.getGameMode()));
         try {
             saveConfig();
         } catch (IOException e) {
@@ -107,6 +112,7 @@ public class LapisInventoriesPlayer {
         inv.clear();
         //Load in the saved one
         inv.addItem(parseItems(p.getGameMode()).toArray(new ItemStack[0]));
+        Bukkit.getPluginManager().callEvent(new InventoryLoadEvent(p, inv, p.getGameMode()));
     }
 
     /**
@@ -131,7 +137,10 @@ public class LapisInventoriesPlayer {
             return;
         //Save and then clear the inventory
         saveInventory();
-        Bukkit.getPlayer(uuid).getInventory().clear();
+        Player p = Bukkit.getPlayer(uuid);
+        PlayerInventory inv = p.getInventory();
+        Bukkit.getPluginManager().callEvent(new InventoryHideEvent(p, inv));
+        inv.clear();
         isHidden = true;
     }
 
@@ -147,6 +156,8 @@ public class LapisInventoriesPlayer {
             return;
         //Restore the players saved inventory
         loadInventory();
+        Player p = Bukkit.getPlayer(uuid);
+        Bukkit.getPluginManager().callEvent(new InventoryRestoreEvent(p, p.getInventory()));
         isHidden = false;
     }
 
@@ -184,8 +195,10 @@ public class LapisInventoriesPlayer {
 
     private List<ItemStack> parseItems(GameMode gm) {
         List<ItemStack> items = new ArrayList<>();
+        //Load the list from the config, we need to confirm that the data isn't malformed
         List<?> data = dataYaml.getList("inventories." + gm.name());
         for (Object item : data) {
+            //Check that each item is in fact an ItemStack before adding it to the list
             if (item instanceof ItemStack) {
                 items.add((ItemStack) item);
             }
