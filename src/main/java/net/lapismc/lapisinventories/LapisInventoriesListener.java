@@ -72,6 +72,7 @@ public class LapisInventoriesListener implements Listener {
 
     @EventHandler
     public void onInventoryOpen(InventoryOpenEvent e) {
+        //TODO: Add permission check here
         if (e.getInventory().getHolder() instanceof Container) {
             e.setCancelled(true);
             //TODO: Send messages about what happened
