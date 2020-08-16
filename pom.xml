@@ -47,7 +47,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.2.4</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -61,6 +61,10 @@
                                 <relocation>
                                     <pattern>net.lapismc.lapiscore</pattern>
                                     <shadedPattern>net.lapismc.lapisinventories.core</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>net.lapismc.datastore</pattern>
+                                    <shadedPattern>net.lapismc.lapisinventories.datastore</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
@@ -89,6 +93,22 @@
             <artifactId>LapisCore</artifactId>
             <version>1.7.8</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.lapismc</groupId>
+            <artifactId>LapisDataStore</artifactId>
+            <version>1.1.2</version>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.zaxxer</groupId>
+                    <artifactId>HikariCP</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>

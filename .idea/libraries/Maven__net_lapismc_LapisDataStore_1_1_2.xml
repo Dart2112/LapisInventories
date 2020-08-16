@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: net.lapismc:LapisDataStore:1.1.2">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/net/lapismc/LapisDataStore/1.1.2/LapisDataStore-1.1.2.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/net/lapismc/LapisDataStore/1.1.2/LapisDataStore-1.1.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/net/lapismc/LapisDataStore/1.1.2/LapisDataStore-1.1.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

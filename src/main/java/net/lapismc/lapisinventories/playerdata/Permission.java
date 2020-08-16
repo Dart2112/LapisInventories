@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.lapsimc.lapisinventories.playerdata;
+package net.lapismc.lapisinventories.playerdata;
 
 import net.lapismc.lapiscore.permissions.LapisPermission;
 

@@ -1,6 +1,6 @@
 name: LapisInventories
 version: ${project.version}
-main: net.lapsimc.lapisinventories.LapisInventories
+main: net.lapismc.lapisinventories.LapisInventories
 api-version: 1.13
 authors: [Dart2112]
 description: A basic GameMode based inventory management system

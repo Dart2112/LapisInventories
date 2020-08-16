@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.lapsimc.lapisinventories.api.events;
+package net.lapismc.lapisinventories.api.events;
 
 import net.lapismc.lapiscore.events.LapisCoreEvent;
 import org.bukkit.GameMode;
@@ -22,15 +22,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
 /**
- * This event is fired when a players inventory is loaded from file
+ * This event is fired when a players inventory is saved to file
  */
-public class InventoryLoadEvent extends LapisCoreEvent {
+public class InventorySaveEvent extends LapisCoreEvent {
 
     private final Player p;
     private final PlayerInventory inv;
     private final GameMode gm;
 
-    public InventoryLoadEvent(Player p, PlayerInventory inv, GameMode gm) {
+    public InventorySaveEvent(Player p, PlayerInventory inv, GameMode gm) {
         this.p = p;
         this.inv = inv;
         this.gm = gm;
@@ -39,7 +39,7 @@ public class InventoryLoadEvent extends LapisCoreEvent {
     /**
      * Get the player
      *
-     * @return the player who's inventory is being loaded
+     * @return the player who's inventory is being saved
      */
     public Player getPlayer() {
         return p;
@@ -48,7 +48,7 @@ public class InventoryLoadEvent extends LapisCoreEvent {
     /**
      * Get the inventory
      *
-     * @return the inventory that is being loaded
+     * @return the inventory that is being saved
      */
     public PlayerInventory getPlayerInventory() {
         return inv;
@@ -57,7 +57,7 @@ public class InventoryLoadEvent extends LapisCoreEvent {
     /**
      * Get the gamemode
      *
-     * @return the gamemode that the players inventory is being loaded from
+     * @return the gamemode that the players inventory is being saved to
      */
     public GameMode getGameMode() {
         return gm;

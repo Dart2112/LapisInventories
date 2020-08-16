@@ -1,1 +1,14 @@
 ConfigVersion: 1
+
+
+Permissions:
+  lapisinventories,player:
+    Default: 1
+    Priority: 0
+    InventoryControl: 1
+    TrackBlockPlacing: 1
+  lapisinventories,admin:
+    Default: 3
+    Priority: 1
+    InventoryControl: 0
+    TrackBlockPlacing: 1

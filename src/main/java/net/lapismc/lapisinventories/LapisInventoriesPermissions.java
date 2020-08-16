@@ -14,26 +14,22 @@
  * limitations under the License.
  */
 
-package net.lapsimc.lapisinventories.api;
+package net.lapismc.lapisinventories;
 
-import net.lapsimc.lapisinventories.LapisInventories;
-import org.bukkit.entity.Player;
+import net.lapismc.lapiscore.LapisCorePermissions;
+import net.lapismc.lapisinventories.playerdata.Permission;
 
-public class LoginAPI {
+public class LapisInventoriesPermissions extends LapisCorePermissions {
 
-    public static boolean isLoginEnabled;
-
-    //TODO: This might not be needed
-    public void enableLogin() {
-        isLoginEnabled = true;
+    LapisInventoriesPermissions(LapisInventories plugin) {
+        super(plugin);
+        registerPermissions();
+        loadPermissions();
     }
 
-    public void hideInventory(Player p) {
-        ((LapisInventories) LapisInventories.getInstance()).getPlayer(p.getUniqueId()).hideInventory();
+    private void registerPermissions() {
+        for (Permission permission : Permission.values()) {
+            registerPermissions(permission.getPermission());
+        }
     }
-
-    public void restoreInventory(Player p) {
-        ((LapisInventories) LapisInventories.getInstance()).getPlayer(p.getUniqueId()).restoreInventory();
-    }
-
 }

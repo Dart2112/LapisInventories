@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package net.lapsimc.lapisinventories.creativeblocks;
+package net.lapismc.lapisinventories.creativeblocks;
 
 import net.lapismc.lapiscore.utils.LocationUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 
 import java.util.UUID;
 
@@ -34,6 +35,12 @@ public class CreativeBlock {
     public CreativeBlock(Location loc, Material mat, UUID uuid) {
         this.loc = loc;
         this.mat = mat;
+        this.uuid = uuid;
+    }
+
+    public CreativeBlock(Block b, UUID uuid) {
+        this.loc = b.getLocation();
+        this.mat = b.getType();
         this.uuid = uuid;
     }
 

@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package net.lapsimc.lapisinventories;
+package net.lapismc.lapisinventories;
 
+import net.lapismc.lapisinventories.playerdata.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -53,8 +53,9 @@ public class LapisInventoriesListener implements Listener {
 
     @EventHandler
     public void onGamemodeChange(PlayerGameModeChangeEvent e) {
-        //TODO: Maybe add permission checks here, if I want to allow a single inventory permission
-        plugin.getPlayer(e.getPlayer().getUniqueId()).processGamemodeChange(e.getNewGameMode());
+        if (plugin.perms.isPermitted(e.getPlayer().getUniqueId(), Permission.InventoryControl.getPermission())) {
+            plugin.getPlayer(e.getPlayer().getUniqueId()).processGamemodeChange(e.getNewGameMode());
+        }
     }
 
     /*
@@ -84,14 +85,19 @@ public class LapisInventoriesListener implements Listener {
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
         if (e.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
-            Block placed = e.getBlockPlaced();
-            //TODO: Check permissions and save the block
+            if (plugin.perms.isPermitted(e.getPlayer().getUniqueId(), Permission.TrackBlockPlacing.getPermission())) {
+                plugin.blocksManager.trackBlock(e.getBlockPlaced(), e.getPlayer());
+            }
         }
     }
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
-        //TODO: Lookup the block and see if it was placed in creative, set drops to null if it was placed with creative
+        if (plugin.blocksManager.checkBlock(e.getBlock())) {
+            //Block is creative
+            e.setDropItems(false);
+            plugin.blocksManager.unTrackBlock(e.getBlock());
+        }
     }
 
 }

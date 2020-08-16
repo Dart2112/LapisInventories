@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package net.lapsimc.lapisinventories.api.events;
+package net.lapismc.lapisinventories.api.events;
 
 import net.lapismc.lapiscore.events.LapisCoreEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
 /**
- * This event is fired when a players inventory is hidden
+ * This event is fired when a players inventory is restored
  */
-public class InventoryHideEvent extends LapisCoreEvent {
+public class InventoryRestoreEvent extends LapisCoreEvent {
 
     private final Player p;
     private final PlayerInventory inv;
 
-    public InventoryHideEvent(Player p, PlayerInventory inv) {
+    public InventoryRestoreEvent(Player p, PlayerInventory inv) {
         this.p = p;
         this.inv = inv;
     }
@@ -36,7 +36,7 @@ public class InventoryHideEvent extends LapisCoreEvent {
     /**
      * Get the player
      *
-     * @return the player who's inventory is being hidden
+     * @return the player who's inventory is being restored
      */
     public Player getPlayer() {
         return p;
@@ -45,7 +45,7 @@ public class InventoryHideEvent extends LapisCoreEvent {
     /**
      * Get the inventory
      *
-     * @return the inventory that is being hidden
+     * @return the inventory that is being restored
      */
     public PlayerInventory getPlayerInventory() {
         return inv;

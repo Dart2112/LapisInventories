@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package net.lapsimc.lapisinventories;
+package net.lapismc.lapisinventories;
 
 import net.lapismc.lapiscore.LapisCoreConfiguration;
 import net.lapismc.lapiscore.LapisCorePlugin;
 import net.lapismc.lapiscore.utils.Metrics;
-import net.lapsimc.lapisinventories.playerdata.LapisInventoriesPlayer;
+import net.lapismc.lapisinventories.creativeblocks.CreativeBlocksManager;
+import net.lapismc.lapisinventories.playerdata.LapisInventoriesPlayer;
+import org.bukkit.Bukkit;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -27,11 +29,13 @@ import java.util.UUID;
 public final class LapisInventories extends LapisCorePlugin {
 
     private final HashMap<UUID, LapisInventoriesPlayer> players = new HashMap<>();
+    public CreativeBlocksManager blocksManager;
 
     @Override
     public void onEnable() {
         registerConfiguration(new LapisCoreConfiguration(this, 1, 1));
         registerPermissions(new LapisInventoriesPermissions(this));
+        blocksManager = new CreativeBlocksManager(this);
         new LapisInventoriesListener(this);
         new Metrics(this);
     }
@@ -41,6 +45,8 @@ public final class LapisInventories extends LapisCorePlugin {
         for (LapisInventoriesPlayer player : players.values()) {
             player.savePlayer();
         }
+        Bukkit.getScheduler().cancelTask(blocksManager.taskID);
+        blocksManager.saveBlocks();
     }
 
     public LapisInventoriesPlayer getPlayer(UUID uuid) {

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package net.lapsimc.lapisinventories.playerdata;
+package net.lapismc.lapisinventories.playerdata;
 
-import net.lapsimc.lapisinventories.LapisInventories;
-import net.lapsimc.lapisinventories.api.events.InventoryHideEvent;
-import net.lapsimc.lapisinventories.api.events.InventoryLoadEvent;
-import net.lapsimc.lapisinventories.api.events.InventoryRestoreEvent;
-import net.lapsimc.lapisinventories.api.events.InventorySaveEvent;
+import net.lapismc.lapisinventories.LapisInventories;
+import net.lapismc.lapisinventories.api.events.InventoryHideEvent;
+import net.lapismc.lapisinventories.api.events.InventoryLoadEvent;
+import net.lapismc.lapisinventories.api.events.InventoryRestoreEvent;
+import net.lapismc.lapisinventories.api.events.InventorySaveEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -85,6 +85,9 @@ public class LapisInventoriesPlayer {
         if (isHidden)
             return;
         Player p = Bukkit.getPlayer(uuid);
+        //Don't save spectator inventories
+        if (p.getGameMode().equals(GameMode.SPECTATOR))
+            return;
         PlayerInventory inv = p.getInventory();
         dataYaml.set("inventories." + p.getGameMode().name(), inv.getContents());
         Bukkit.getPluginManager().callEvent(new InventorySaveEvent(p, inv, p.getGameMode()));
@@ -178,6 +181,7 @@ public class LapisInventoriesPlayer {
         //Make sure the data file exists, create it if it doesn't
         if (!dataFile.exists()) {
             try {
+                dataFile.getParentFile().mkdirs();
                 dataFile.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();

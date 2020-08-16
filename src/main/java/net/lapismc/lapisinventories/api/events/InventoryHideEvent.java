@@ -14,32 +14,29 @@
  * limitations under the License.
  */
 
-package net.lapsimc.lapisinventories.api.events;
+package net.lapismc.lapisinventories.api.events;
 
 import net.lapismc.lapiscore.events.LapisCoreEvent;
-import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
 /**
- * This event is fired when a players inventory is saved to file
+ * This event is fired when a players inventory is hidden
  */
-public class InventorySaveEvent extends LapisCoreEvent {
+public class InventoryHideEvent extends LapisCoreEvent {
 
     private final Player p;
     private final PlayerInventory inv;
-    private final GameMode gm;
 
-    public InventorySaveEvent(Player p, PlayerInventory inv, GameMode gm) {
+    public InventoryHideEvent(Player p, PlayerInventory inv) {
         this.p = p;
         this.inv = inv;
-        this.gm = gm;
     }
 
     /**
      * Get the player
      *
-     * @return the player who's inventory is being saved
+     * @return the player who's inventory is being hidden
      */
     public Player getPlayer() {
         return p;
@@ -48,19 +45,11 @@ public class InventorySaveEvent extends LapisCoreEvent {
     /**
      * Get the inventory
      *
-     * @return the inventory that is being saved
+     * @return the inventory that is being hidden
      */
     public PlayerInventory getPlayerInventory() {
         return inv;
     }
 
-    /**
-     * Get the gamemode
-     *
-     * @return the gamemode that the players inventory is being saved to
-     */
-    public GameMode getGameMode() {
-        return gm;
-    }
 
 }
